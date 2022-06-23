@@ -43,10 +43,36 @@ class Game extends React.Component {
     return cells;
   }
 
+  // CALCULATE THE POSITION OF THE BOARD ELEMENT
+  getElementOffset() {
+    const rect = this.boardRef.getBoundingClientRect();
+    const doc = document.documentElement;
+    return { x: (rect.left + window.pageXOffset) - doc.clientLeft,
+             y: (rect.top + window.pageYOffset) - doc.clientTop,
+    };
+  }
+
+  handleClick = (event) => {
+    const elemOffset = this.getElementOffset();
+    const offsetX = event.clientX - elemOffset.x;
+    const offsetY = event.clientY - elemOffset.y;
+    const x = Math.floor(offsetX / CELL_SIZE);
+    const y = Math.floor(offsetY / CELL_SIZE);
+
+    if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows){
+      this.board[y][x] = !this.board[y][x];
+    }
+
+    this.setState({ cells: this.makeCells()});
+  }
+
   render () {
     return (
       <div>
-        <div className="board" style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px` }}>
+        <div  className="board"
+              style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px` }}
+              onClick={this.handleClick}
+              ref={(n) => { this.boardRef = n; }}>
 
         </div>
       </div>
