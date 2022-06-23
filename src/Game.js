@@ -1,7 +1,8 @@
 import React from 'react';
 import './Game.css';
+import Cell from './Cell.js'
 
-const CELL_SIZE = 20;
+export const CELL_SIZE = 20;
 const WIDTH = 800;
 const HEIGHT = 600;
 
@@ -67,13 +68,16 @@ class Game extends React.Component {
   }
 
   render () {
+    const { cells } = this.state;
     return (
       <div>
         <div  className="board"
               style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px` }}
               onClick={this.handleClick}
               ref={(n) => { this.boardRef = n; }}>
-
+              {cells.map(cell =>
+                (<Cell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />)
+                )}
         </div>
       </div>
     )
